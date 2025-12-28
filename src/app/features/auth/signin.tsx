@@ -1,6 +1,6 @@
 "use client";
 import { signIn, useSession } from "next-auth/react";
-import { SignOut } from "./signout";
+import { SignOut } from "@/app/features/auth/signout";
 
 export function SignIn() {
     const { data: session, status } = useSession();
@@ -8,7 +8,7 @@ export function SignIn() {
 
     const handleSignIn = async () => {
         try {
-            await signIn("keycloak");
+            await signIn("keycloak", { callbackUrl: "/projects/1/board" });
         } catch (error) {
             console.error("Sign in error:", error);
         }
