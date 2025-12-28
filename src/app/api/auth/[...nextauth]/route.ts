@@ -1,5 +1,6 @@
-import NextAuth from "next-auth"
+import NextAuth from "next-auth/next"
 import KeycloakProvider from "next-auth/providers/keycloak"
+import type { Session } from "next-auth"
 
 const handler = NextAuth({
     providers: [
@@ -22,7 +23,7 @@ const handler = NextAuth({
         },
         async session({ session, token }) {
             if (token.accessToken) {
-                session.accessToken = token.accessToken as string;
+                (session as Session & { accessToken?: string }).accessToken = token.accessToken as string;
             }
             return session;
         },
