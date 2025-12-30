@@ -14,6 +14,9 @@ const handler = NextAuth({
         strategy: "jwt",
     },
     secret: process.env.NEXTAUTH_SECRET,
+    pages: {
+        signIn: "/",
+    },
     callbacks: {
         async jwt({ token, account }) {
             if (account) {
@@ -26,6 +29,15 @@ const handler = NextAuth({
                 (session as Session & { accessToken?: string }).accessToken = token.accessToken as string;
             }
             return session;
+        },
+        async redirect({ url, baseUrl }) {
+            if (url === baseUrl || url === `${baseUrl}/`) {
+                return `${baseUrl}/projects/1/board`;
+            }
+            if (url.startsWith(baseUrl)) {
+                return url;
+            }
+            return baseUrl;
         },
     },
 })
