@@ -1,0 +1,1 @@
+export const BACKLOG_MIN_HEIGHT = 500;
