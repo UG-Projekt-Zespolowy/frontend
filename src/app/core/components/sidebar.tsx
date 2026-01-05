@@ -15,11 +15,7 @@ export function Sidebar() {
     };
 
     const handleSignOut = async () => {
-        try {
-            await signOut({ callbackUrl: "/" });
-        } catch (error) {
-            console.error("Sign out error:", error);
-        }
+        await signOut({ callbackUrl: "/" });
     };
 
     if (!session?.user) {
@@ -36,7 +32,7 @@ export function Sidebar() {
         >
             <div className="flex flex-col h-full p-4">
                 <div className="flex flex-col items-center mb-6">
-                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-400 to-indigo-500 flex items-center justify-center text-white text-2xl font-bold mb-3 shadow-lg overflow-hidden">
+                    <div className="w-20 h-20 rounded-full bg-linear-to-br from-purple-400 to-indigo-500 flex items-center justify-center text-white text-2xl font-bold mb-3 shadow-lg overflow-hidden">
                         {user.image ? (
                             <Image
                                 src={user.image}
@@ -101,4 +97,3 @@ export function Sidebar() {
         </div>
     );
 }
-
