@@ -16,7 +16,7 @@ export function SignIn() {
 
     if (isLoading) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-purple-500 to-indigo-600">
+            <div className="flex min-h-screen items-center justify-center bg-linear-to-r from-purple-500 to-indigo-600">
                 <div className="text-white">Loading...</div>
             </div>
         );
@@ -24,7 +24,7 @@ export function SignIn() {
 
     if (session) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-purple-500 to-indigo-600">
+            <div className="flex min-h-screen items-center justify-center bg-linear-to-r from-purple-500 to-indigo-600">
                 <div className="flex flex-col items-center gap-4">
                     <div className="text-white text-xl">
                         User: {session.user?.email || session.user?.name || "User"}
@@ -36,7 +36,7 @@ export function SignIn() {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-purple-500 to-indigo-600">
+        <div className="flex min-h-screen items-center justify-center bg-linear-to-r from-purple-500 to-indigo-600">
             <button
                 onClick={handleSignIn}
                 className="px-6 py-3 bg-white text-purple-700 font-semibold rounded-lg shadow-lg hover:bg-purple-100 hover:cursor-pointer transition-colors duration-300"

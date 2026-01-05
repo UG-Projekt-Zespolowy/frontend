@@ -1,70 +1,61 @@
 "use client";
 
-import { useMemo } from "react";
-import { KanbanColumn } from "@/app/features/board/kanban-column";
+import { useMemo, memo } from "react";
 import { IssueSearch, type Issue } from "@/app/features/board/issues";
-import { type Column } from "@/app/features/board/types";
-import { COLUMN_IDS, COLUMN_TITLES } from "@/app/features/board/constants/board.constants";
+import { useProjectEpics, type Issue as ApiIssue, useProjectIssues } from "@/app/core/hooks";
+import { EpicBoard } from "@/app/features/board/epic-board";
+import { LoadingState, ErrorState, EmptyState } from "@/app/core/components";
 
-const MOCK_COLUMNS: readonly Column[] = [
-    {
-        id: COLUMN_IDS.TODO,
-        title: COLUMN_TITLES[COLUMN_IDS.TODO],
-        issues: [
-            { id: "1", title: "Issue 1", description: "Description for issue 1" },
-            { id: "2", title: "Issue 2", description: "Description for issue 2" },
-        ],
-    },
-    {
-        id: COLUMN_IDS.IN_PROGRESS,
-        title: COLUMN_TITLES[COLUMN_IDS.IN_PROGRESS],
-        issues: [
-            { id: "3", title: "Issue 3", description: "Description for issue 3" },
-        ],
-    },
-    {
-        id: COLUMN_IDS.READY_FOR_REVIEW,
-        title: COLUMN_TITLES[COLUMN_IDS.READY_FOR_REVIEW],
-        issues: [
-            { id: "5", title: "Issue 5", description: "Description for issue 5" },
-        ],
-    },
-    {
-        id: COLUMN_IDS.DONE,
-        title: COLUMN_TITLES[COLUMN_IDS.DONE],
-        issues: [
-            { id: "4", title: "Issue 4", description: "Description for issue 4" },
-        ],
-    },
-    {
-        id: COLUMN_IDS.CLOSED,
-        title: COLUMN_TITLES[COLUMN_IDS.CLOSED],
-        issues: [],
-    },
-] as const;
+interface KanbanBoardProps {
+    readonly projectId: string;
+}
 
-export function KanbanBoard() {
-    const columns = useMemo(() => MOCK_COLUMNS, []);
+function mapApiIssueToBoardIssue(apiIssue: ApiIssue): Issue {
+    return {
+        id: apiIssue.id,
+        title: apiIssue.title,
+        description: apiIssue.description || "",
+    };
+}
+
+export const KanbanBoard = memo(function KanbanBoard({ projectId }: KanbanBoardProps) {
+    const { data: epicsData, isLoading: epicsLoading, error: epicsError, refetch } = useProjectEpics(projectId, 0, 100);
+    const { data: allProjectIssues } = useProjectIssues(projectId, 0, 1000);
 
     const allIssues: readonly Issue[] = useMemo(() => {
-        return columns.flatMap((column) => column.issues);
-    }, [columns]);
+        if (!allProjectIssues?.content) {
+            return [];
+        }
+        return allProjectIssues.content.map(mapApiIssueToBoardIssue);
+    }, [allProjectIssues]);
+
+    if (epicsLoading) {
+        return <LoadingState message="Loading epics..." />;
+    }
+
+    if (epicsError) {
+        return (
+            <ErrorState
+                message="Failed to load epics. Please try again."
+                onRetry={() => refetch()}
+            />
+        );
+    }
+
+    if (!epicsData?.content || epicsData.content.length === 0) {
+        return <EmptyState message="No epics found for this project." />;
+    }
 
     return (
         <div>
             <div className="mb-6">
                 <IssueSearch issues={allIssues} />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-                {columns.map((column) => (
-                    <KanbanColumn
-                        key={column.id}
-                        id={column.id}
-                        title={column.title}
-                        issues={column.issues}
-                    />
+            <div>
+                {epicsData.content.map((epic) => (
+                    <EpicBoard key={epic.id} epicId={epic.id} epicTitle={epic.title} />
                 ))}
             </div>
         </div>
     );
-}
+});
