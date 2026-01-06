@@ -57,7 +57,7 @@ export default function BoardPage() {
                         </Button>
                     </div>
                 </div>
-                <KanbanBoard projectId={projectId} />
+                <KanbanBoard projectId={params.id as string} />
             </div>
         </div>
     );
