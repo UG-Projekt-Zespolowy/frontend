@@ -8,7 +8,7 @@ export function SignIn() {
 
     const handleSignIn = async () => {
         try {
-            await signIn("keycloak", { callbackUrl: "/projects/1/board" });
+            await signIn("keycloak", { callbackUrl: "/projects" });
         } catch (error) {
             console.error("Sign in error:", error);
         }
