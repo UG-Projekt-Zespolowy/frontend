@@ -34,7 +34,7 @@ export default function BoardPage({ params }: BoardPageProps) {
                         </Button>
                     </div>
                 </div>
-                <KanbanBoard />
+                <KanbanBoard projectId={params.id}/>
             </div>
         </div>
     );
