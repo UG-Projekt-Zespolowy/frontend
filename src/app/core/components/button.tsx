@@ -10,6 +10,8 @@ interface ButtonProps {
     readonly variant?: "primary" | "secondary" | "icon";
     readonly className?: string;
     readonly ariaLabel?: string;
+    readonly type?: "button" | "submit" | "reset";
+    readonly disabled?: boolean;
 }
 
 export function Button({
@@ -19,8 +21,10 @@ export function Button({
     variant = "secondary",
     className = "",
     ariaLabel,
+    type = "button",
+    disabled = false,
 }: ButtonProps) {
-    const baseStyles = "px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all font-medium";
+    const baseStyles = "px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed";
 
     const variantStyles = {
         primary: "bg-white text-purple-700 hover:bg-purple-50",
@@ -39,7 +43,13 @@ export function Button({
     }
 
     return (
-        <button onClick={onClick} className={combinedClassName} aria-label={ariaLabel}>
+        <button
+            onClick={onClick}
+            className={combinedClassName}
+            aria-label={ariaLabel}
+            type={type}
+            disabled={disabled}
+        >
             {children}
         </button>
     );
