@@ -1,6 +1,7 @@
 declare module "next-auth" {
     interface Session {
         accessToken?: string;
+        idToken?: string;
     }
 
     interface User {
@@ -11,5 +12,6 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
     interface JWT extends DefaultJWT {
         accessToken?: string;
+        idToken?: string;
     }
 }
