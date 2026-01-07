@@ -67,6 +67,39 @@ export function useCreateProject() {
     });
 }
 
+interface UpdateProjectRequest {
+    readonly projectId: string;
+    readonly name: string;
+    readonly description?: string;
+}
+
+export function useUpdateProject() {
+    const queryClient = useQueryClient();
+
+    return useMutation<Project, Error, UpdateProjectRequest>({
+        mutationFn: async (request) => {
+            const response = await fetchWithAuth(`/api/v1/projects/${request.projectId}`, {
+                method: "PUT",
+                body: JSON.stringify({
+                    name: request.name,
+                    description: request.description || "",
+                }),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Failed to update project: ${response.status} ${errorText}`);
+            }
+
+            return response.json();
+        },
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["projects"] });
+            queryClient.invalidateQueries({ queryKey: ["project", data.id] });
+        },
+    });
+}
+
 export function useDeleteProject() {
     const queryClient = useQueryClient();
 
