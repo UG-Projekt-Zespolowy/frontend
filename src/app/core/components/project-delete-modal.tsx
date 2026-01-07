@@ -69,7 +69,7 @@ export const ProjectDeleteModal = memo(function ProjectDeleteModal({
                                 type="submit"
                                 variant="primary"
                                 disabled={!isConfirmed || isDeleting}
-                                className="bg-red-600 hover:bg-red-700 text-red-600 hover:text-white hover:cursor-pointer flex-1"
+                                className="bg-red-600 hover:bg-red-700 text-red-600 hover:text-white flex-1"
                             >
                                 {isDeleting ? "Deleting..." : "Delete Project"}
                             </Button>
@@ -78,7 +78,6 @@ export const ProjectDeleteModal = memo(function ProjectDeleteModal({
                             <Button
                                 type="button"
                                 variant="secondary"
-                                className="hover:cursor-pointer"
                                 onClick={() => {
                                     onClose();
                                     setConfirmationName("");
