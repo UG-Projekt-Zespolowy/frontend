@@ -32,7 +32,7 @@ const handler = NextAuth({
         },
         async redirect({ url, baseUrl }) {
             if (url === baseUrl || url === `${baseUrl}/`) {
-                return `${baseUrl}/projects/1/board`;
+                return `${baseUrl}/projects`;
             }
             if (url.startsWith(baseUrl)) {
                 return url;

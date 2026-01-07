@@ -13,7 +13,7 @@ export default withAuth(
     }
 
     if (isAuth && isHomePage) {
-      return NextResponse.redirect(new URL("/projects/1/board", req.url));
+      return NextResponse.redirect(new URL("/projects", req.url));
     }
 
     return NextResponse.next();
