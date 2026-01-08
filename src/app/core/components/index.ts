@@ -11,4 +11,6 @@ export { FormInput } from "@/app/core/components/form-input";
 export { FormTextarea } from "@/app/core/components/form-textarea";
 export { FormError } from "@/app/core/components/form-error";
 export { FormActions } from "@/app/core/components/form-actions";
+export { ProjectDeleteModal } from "@/app/core/components/project-delete-modal";
+export { ProjectEditModal } from "@/app/core/components/project-edit-modal";
 
