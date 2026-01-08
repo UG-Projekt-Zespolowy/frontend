@@ -12,7 +12,7 @@ export async function fetchWithAuth(
     options: RequestInit = {}
 ): Promise<Response> {
     const token = await getAccessToken();
-    
+
     if (!token) {
         throw new Error("No access token available");
     }

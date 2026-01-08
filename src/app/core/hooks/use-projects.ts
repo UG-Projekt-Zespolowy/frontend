@@ -1,6 +1,7 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { fetchWithAuth } from "@/app/core/api/api-client";
 import type { Project, PageResponse } from "@/app/core/types";
 
@@ -28,5 +29,40 @@ export function useProject(id: string) {
             return response.json();
         },
         enabled: !!id,
+    });
+}
+
+interface CreateProjectRequest {
+    readonly name: string;
+    readonly description?: string;
+    readonly ownerId: string;
+}
+
+export function useCreateProject() {
+    const queryClient = useQueryClient();
+    const router = useRouter();
+
+    return useMutation<Project, Error, CreateProjectRequest>({
+        mutationFn: async (request) => {
+            const response = await fetchWithAuth("/api/v1/projects", {
+                method: "POST",
+                body: JSON.stringify({
+                    name: request.name,
+                    description: request.description || "",
+                    ownerId: request.ownerId,
+                }),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Failed to create project: ${response.status} ${errorText}`);
+            }
+
+            return response.json();
+        },
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["projects"] });
+            router.push(`/projects/${data.id}/epics`);
+        },
     });
 }
