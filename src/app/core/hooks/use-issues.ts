@@ -41,12 +41,19 @@ export function useBacklogIssues(projectId: string, page: number = 0, size: numb
         queryKey: ["issues", "backlog", projectId, page, size],
         queryFn: async () => {
             const response = await fetchWithAuth(
-                `/api/v1/issues/project/${projectId}?status=BACKLOG&page=${page}&size=${size}`
+                `/api/v1/issues/project/${projectId}?page=${page}&size=${size}`
             );
             if (!response.ok) {
                 throw new Error("Failed to fetch backlog issues");
             }
-            return response.json();
+            const data = await response.json() as PageResponse<Issue>;
+            
+            const backlogIssues = data.content.filter(issue => issue.status === "BACKLOG");
+            
+            return {
+                ...data,
+                content: backlogIssues,
+            };
         },
         enabled: !!projectId,
     });
