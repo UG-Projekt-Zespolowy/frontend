@@ -13,4 +13,6 @@ export { FormError } from "@/app/core/components/form-error";
 export { FormActions } from "@/app/core/components/form-actions";
 export { ProjectDeleteModal } from "@/app/core/components/project-delete-modal";
 export { ProjectEditModal } from "@/app/core/components/project-edit-modal";
+export { EpicEditModal } from "@/app/core/components/epic-edit-modal";
+export { EpicDeleteModal } from "@/app/core/components/epic-delete-modal";
 
