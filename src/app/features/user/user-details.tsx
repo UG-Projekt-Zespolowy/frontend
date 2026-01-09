@@ -1,13 +1,19 @@
-import { useSession } from "next-auth/react";
+"use client";
 
+import { useSession } from "next-auth/react";
+import { LoadingState } from "@/app/core/components";
 
 export function UserDetails() {
+    const { data: session, status } = useSession();
 
-    const { data: session } = useSession();
+    if (status === "loading") {
+        return <LoadingState />;
+    }
 
     if (!session?.user) {
         return null;
     }
+
     const user = session.user;
 
     return (
