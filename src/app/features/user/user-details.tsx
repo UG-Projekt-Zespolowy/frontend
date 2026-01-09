@@ -27,7 +27,6 @@ export function UserDetails() {
         return null;
     }
 
-    // Use API data if available, otherwise fallback to session
     const displayName = userFromApi?.name || session.user.name || "";
     const displayEmail = userFromApi?.email || session.user.email || "";
 
@@ -36,9 +35,7 @@ export function UserDetails() {
     };
 
     const handleEditConfirm = (name: string, email: string) => {
-        // Only attempt update if we have a userId from the API
         if (!userId) {
-            console.error("Cannot update user: userId not available");
             return;
         }
         
@@ -61,9 +58,6 @@ export function UserDetails() {
         setShowEditModal(false);
     };
 
-    // Show debug info
-    console.log("User details state:", { userId, loadingUser, userFromApi, email, displayName, displayEmail });
-
     return (
         <>
             <div className="space-y-3">
@@ -81,7 +75,7 @@ export function UserDetails() {
                     disabled={loadingUser}
                     className="w-full mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
-                    {loadingUser ? "Loading..." : userId ? "Edit Profile" : "Edit Profile (Read Only)"}
+                    {loadingUser ? "Loading..." : "Edit Profile"}
                 </button>
             </div>
 

@@ -100,7 +100,7 @@ export function useUpdateUser() {
                 method: "PUT",
                 body: JSON.stringify({
                     name: request.name,
-                    username: request.email, // Backend expects "username" field but it stores email
+                    username: request.email, 
                 }),
             });
 
@@ -112,7 +112,6 @@ export function useUpdateUser() {
             return response.json();
         },
         onSuccess: (data) => {
-            // Invalidate and refetch user queries to update the UI
             queryClient.invalidateQueries({ queryKey: ["user"] });
         },
     });
