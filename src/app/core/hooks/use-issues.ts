@@ -35,3 +35,20 @@ export function useProjectIssues(projectId: string, page: number = 0, size: numb
         enabled: !!projectId,
     });
 }
+
+export function useBacklogIssues(projectId: string, page: number = 0, size: number = 100) {
+    return useQuery<PageResponse<Issue>>({
+        queryKey: ["issues", "backlog", projectId, page, size],
+        queryFn: async () => {
+            const response = await fetchWithAuth(
+                `/api/v1/issues/project/${projectId}?status=BACKLOG&page=${page}&size=${size}`
+            );
+            if (!response.ok) {
+                throw new Error("Failed to fetch backlog issues");
+            }
+            return response.json();
+        },
+        enabled: !!projectId,
+    });
+}
+
