@@ -1,13 +1,45 @@
-import { IssueCard, IssueSearch, type Issue } from "@/app/features/board/issues";
+"use client";
+
+import { useMemo } from "react";
+import { IssueCard, IssueSearch, type Issue as BoardIssue } from "@/app/features/board/issues";
 import { BACKLOG_MIN_HEIGHT } from "@/app/features/backlog/constants/backlog-board.constants";
+import { useBacklogIssues, type Issue as ApiIssue } from "@/app/core/hooks";
+import { LoadingState, ErrorState } from "@/app/core/components";
 
-const MOCK_BACKLOG_ISSUES: readonly Issue[] = [
-    { id: "6", title: "Backlog Issue 1", description: "Description for backlog issue 1" },
-    { id: "7", title: "Backlog Issue 2", description: "Description for backlog issue 2" },
-];
+interface BacklogBoardProps {
+    readonly projectId: string;
+}
 
-export function BacklogBoard() {
-    const allIssues: readonly Issue[] = MOCK_BACKLOG_ISSUES;
+function mapApiIssueToBoardIssue(apiIssue: ApiIssue): BoardIssue {
+    return {
+        id: apiIssue.id,
+        title: apiIssue.title,
+        description: apiIssue.description || "",
+    };
+}
+
+export function BacklogBoard({ projectId }: BacklogBoardProps) {
+    const { data: backlogData, isLoading, error, refetch } = useBacklogIssues(projectId, 0, 100);
+
+    const allIssues: readonly BoardIssue[] = useMemo(() => {
+        if (!backlogData?.content) {
+            return [];
+        }
+        return backlogData.content.map(mapApiIssueToBoardIssue);
+    }, [backlogData]);
+
+    if (isLoading) {
+        return <LoadingState message="Loading backlog issues..." />;
+    }
+
+    if (error) {
+        return (
+            <ErrorState
+                message="Failed to load backlog issues. Please try again."
+                onRetry={() => refetch()}
+            />
+        );
+    }
 
     return (
         <div>
