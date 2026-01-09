@@ -51,6 +51,7 @@ export function UserDetails() {
             {
                 onSuccess: () => {
                     setShowEditModal(false);
+                    window.location.reload();
                 },
             }
         );
