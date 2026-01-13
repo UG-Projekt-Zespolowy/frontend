@@ -4,5 +4,15 @@ export { SidebarToggle } from "@/app/core/components/sidebar-toggle";
 export { LoadingState } from "@/app/core/components/loading-state";
 export { ErrorState } from "@/app/core/components/error-state";
 export { EmptyState } from "@/app/core/components/empty-state";
-export { UserEditModal } from "@/app/core/components/user-edit-modal";
+export { PageLayout } from "@/app/core/components/page-layout";
+export { PageHeader } from "@/app/core/components/page-header";
+export { FormField } from "@/app/core/components/form-field";
+export { FormInput } from "@/app/core/components/form-input";
+export { FormTextarea } from "@/app/core/components/form-textarea";
+export { FormError } from "@/app/core/components/form-error";
+export { FormActions } from "@/app/core/components/form-actions";
+export { ProjectDeleteModal } from "@/app/core/components/project-delete-modal";
+export { ProjectEditModal } from "@/app/core/components/project-edit-modal";
+export { EpicEditModal } from "@/app/core/components/epic-edit-modal";
+export { EpicDeleteModal } from "@/app/core/components/epic-delete-modal";
 

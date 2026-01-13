@@ -16,10 +16,16 @@ export function Sidebar() {
     };
 
     const handleSignOut = async () => {
-        try {
-            await signOut({ callbackUrl: "/" });
-        } catch (error) {
-            console.error("Sign out error:", error);
+        const idToken = (session as { idToken?: string })?.idToken;
+        const issuer = process.env.NEXT_PUBLIC_KEYCLOAK_ISSUER;
+
+        await signOut({ redirect: false });
+
+        if (idToken && issuer) {
+            const logoutUrl = `${issuer}/protocol/openid-connect/logout?id_token_hint=${idToken}&post_logout_redirect_uri=${encodeURIComponent(window.location.origin)}`;
+            window.location.href = logoutUrl;
+        } else {
+            window.location.href = "/";
         }
     };
 
@@ -106,4 +112,3 @@ export function Sidebar() {
         </div>
     );
 }
-
