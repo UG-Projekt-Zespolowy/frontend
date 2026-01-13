@@ -7,11 +7,7 @@ export function SignIn() {
     const isLoading = status === "loading";
 
     const handleSignIn = async () => {
-        try {
-            await signIn("keycloak", { callbackUrl: "/projects" });
-        } catch (error) {
-            console.error("Sign in error:", error);
-        }
+        await signIn("keycloak", { callbackUrl: "/projects" });
     };
 
     if (isLoading) {

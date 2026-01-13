@@ -7,7 +7,7 @@ const handler = NextAuth({
         KeycloakProvider({
             clientId: process.env.KEYCLOAK_CLIENT_ID!,
             clientSecret: process.env.KEYCLOAK_CLIENT_SECRET!,
-            issuer: process.env.KEYCLOAK_ISSUER!,
+            issuer: process.env.NEXT_PUBLIC_KEYCLOAK_ISSUER || process.env.KEYCLOAK_ISSUER!,
         })
     ],
     session: {
@@ -21,12 +21,16 @@ const handler = NextAuth({
         async jwt({ token, account }) {
             if (account) {
                 token.accessToken = account.access_token;
+                token.idToken = account.id_token;
             }
             return token;
         },
         async session({ session, token }) {
             if (token.accessToken) {
-                (session as Session & { accessToken?: string }).accessToken = token.accessToken as string;
+                (session as Session & { accessToken?: string; idToken?: string }).accessToken = token.accessToken as string;
+            }
+            if (token.idToken) {
+                (session as Session & { accessToken?: string; idToken?: string }).idToken = token.idToken as string;
             }
             return session;
         },
