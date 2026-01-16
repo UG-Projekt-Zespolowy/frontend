@@ -3,18 +3,26 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { fetchWithAuth } from "@/app/core/api/api-client";
+import { useCurrentUser } from "@/app/core/hooks/use-users";
 import type { Project, PageResponse } from "@/app/core/types";
 
 export function useProjects(page: number = 0, size: number = 100) {
+    const { data: currentUser, isLoading: isLoadingUser } = useCurrentUser();
+
     return useQuery<PageResponse<Project>>({
-        queryKey: ["projects", page, size],
+        queryKey: ["projects", "user", currentUser?.id, page, size],
         queryFn: async () => {
-            const response = await fetchWithAuth(`/api/v1/projects?page=${page}&size=${size}`);
+            if (!currentUser?.id) {
+                throw new Error("User not authenticated");
+            }
+            const response = await fetchWithAuth(`/api/v1/projects/user/${currentUser.id}?page=${page}&size=${size}`);
             if (!response.ok) {
-                throw new Error("Failed to fetch projects");
+                const errorText = await response.text();
+                throw new Error(`Failed to fetch projects: ${response.status} ${errorText}`);
             }
             return response.json();
         },
+        enabled: !!currentUser?.id && !isLoadingUser,
     });
 }
 

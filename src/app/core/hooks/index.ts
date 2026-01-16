@@ -3,4 +3,5 @@ export * from "./use-epics";
 export * from "./use-projects";
 export * from "./use-users";
 export * from "./use-user-sync";
-export type { User, Issue, Epic, Project, PageResponse } from "@/app/core/types";
+export * from "./use-user-projects";
+export type { User, Issue, Epic, Project, PageResponse, UserProject } from "@/app/core/types";
