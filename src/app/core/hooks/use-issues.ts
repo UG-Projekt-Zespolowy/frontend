@@ -14,7 +14,15 @@ export function useEpicIssues(epicId: string, page: number = 0, size: number = 1
             if (!response.ok) {
                 throw new Error("Failed to fetch epic issues");
             }
-            return response.json();
+
+            const data = (await response.json()) as PageResponse<Issue>;
+
+            const activeIssues = data.content.filter((issue) => issue.status !== "BACKLOG");
+
+            return {
+                ...data,
+                content: activeIssues,
+            };
         },
         enabled: !!epicId,
     });
@@ -36,26 +44,26 @@ export function useProjectIssues(projectId: string, page: number = 0, size: numb
     });
 }
 
-export function useBacklogIssues(projectId: string, page: number = 0, size: number = 100) {
+export function useBacklogIssues(epicId: string, page: number = 0, size: number = 100) {
     return useQuery<PageResponse<Issue>>({
-        queryKey: ["issues", "backlog", projectId, page, size],
+        queryKey: ["issues", "backlog", epicId, page, size],
         queryFn: async () => {
             const response = await fetchWithAuth(
-                `/api/v1/issues/project/${projectId}?page=${page}&size=${size}`
+                `/api/v1/issues/epic/${epicId}?page=${page}&size=${size}`
             );
             if (!response.ok) {
                 throw new Error("Failed to fetch backlog issues");
             }
-            const data = await response.json() as PageResponse<Issue>;
-            
-            const backlogIssues = data.content.filter(issue => issue.status === "BACKLOG");
-            
+            const data = (await response.json()) as PageResponse<Issue>;
+
+            const backlogIssues = data.content.filter((issue) => issue.status === "BACKLOG");
+
             return {
                 ...data,
                 content: backlogIssues,
             };
         },
-        enabled: !!projectId,
+        enabled: !!epicId,
     });
 }
 
