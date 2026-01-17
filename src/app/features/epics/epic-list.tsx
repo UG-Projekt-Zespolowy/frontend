@@ -110,6 +110,17 @@ export const EpicList = memo(function EpicList({ projectId }: EpicListProps) {
                         <div className="absolute top-4 right-4 flex gap-2">
                             <button
                                 type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    router.push(`/projects/${projectId}/backlog?epicId=${epic.id}`);
+                                }}
+                                className="px-3 py-1.5 text-sm text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors hover:cursor-pointer font-medium"
+                                aria-label="View backlog"
+                            >
+                                Backlog
+                            </button>
+                            <button
+                                type="button"
                                 onClick={(e) => handleEditClick(e, epic)}
                                 className="p-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors hover:cursor-pointer"
                                 aria-label="Edit epic"

@@ -25,9 +25,6 @@ export default function BoardPage() {
                             <Button href={`/projects/${projectId}/members`} variant="secondary">
                                 Members
                             </Button>
-                            <Button href={`/projects/${projectId}/backlog`} variant="secondary">
-                                Backlog
-                            </Button>
                             <Button href="/projects/create" variant="icon" ariaLabel="Add new project">
                                 +
                             </Button>
