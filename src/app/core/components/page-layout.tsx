@@ -3,6 +3,7 @@
 import { type ReactNode } from "react";
 import { Sidebar } from "@/app/core/components/sidebar";
 import { useSidebar } from "@/app/core/contexts/sidebar-context";
+import { SIDEBAR_PADDING } from "@/app/core/utils/sidebar.utils";
 
 type MaxWidth = "sm" | "md" | "lg" | "xl" | "2xl" | "4xl" | "5xl" | "7xl";
 
@@ -41,8 +42,7 @@ export function PageLayout({ children, maxWidth = "5xl" }: PageLayoutProps) {
         <div className="min-h-screen bg-linear-to-r from-purple-500 to-indigo-600 p-6">
             <Sidebar />
             <div
-                className={`${MAX_WIDTH_CLASSES[maxWidth]} transition-all duration-300 ${isCollapsed ? "mx-auto" : ""
-                    }`}
+                className={`${MAX_WIDTH_CLASSES[maxWidth]} transition-all duration-300 ${isCollapsed ? `mx-auto ${SIDEBAR_PADDING.COLLAPSED}` : ""}`}
                 style={
                     !isCollapsed
                         ? {

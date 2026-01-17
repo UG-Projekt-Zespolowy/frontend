@@ -13,6 +13,7 @@ interface IssueEditFormProps {
 }
 
 const STATUS_OPTIONS = [
+    { value: "BACKLOG", label: "Backlog" },
     { value: "TO_DO", label: "To Do" },
     { value: "IN_PROGRESS", label: "In Progress" },
     { value: "READY_FOR_REVIEW", label: "Ready for Review" },
