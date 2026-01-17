@@ -1,39 +1,51 @@
 "use client";
 
-import { Button, Sidebar } from "@/app/core/components";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { Button, PageHeader, PageLayout, ProjectAccessGuard, ErrorState } from "@/app/core/components";
+import { useProject } from "@/app/core/hooks";
 import { BacklogBoard } from "@/app/features/backlog/backlog-board";
 
-interface BacklogPageProps {
-    params: {
-        id: string;
-    };
-}
+export default function BacklogPage() {
+    const params = useParams();
+    const projectId = params.id as string;
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const epicId = searchParams.get("epicId") || "";
+    const { data: project, isLoading } = useProject(projectId);
 
-export default async function BacklogPage({ params }: BacklogPageProps) {
-    const resolvedParams = await params;
-    
+    const title = isLoading ? "Backlog" : project?.name ? `${project.name} – Backlog` : "Backlog";
+
     return (
-        <div className="min-h-screen bg-gradient-to-r from-purple-500 to-indigo-600 p-6">
-            <Sidebar />
-            <div className={`max-w-7xl mx-auto transition-all duration-300`}>
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-bold text-white drop-shadow-lg">
-                        Backlog
-                    </h1>
-                    <div className="flex gap-3">
-                        <Button href={`/projects/${resolvedParams.id}/epics`} variant="secondary">
-                            Epics
-                        </Button>
-                        <Button href={`/projects/${resolvedParams.id}/board`} variant="secondary">
-                            Board
-                        </Button>
-                        <Button href="/projects/form" variant="icon" ariaLabel="Add new project">
-                            +
-                        </Button>
-                    </div>
-                </div>
-                <BacklogBoard projectId={resolvedParams.id} />
-            </div>
-        </div>
+        <ProjectAccessGuard>
+            <PageLayout maxWidth="7xl">
+                <PageHeader
+                    title={title}
+                    actions={
+                        <>
+                            <Button href={`/projects/${projectId}/epics`} variant="secondary">
+                                Epics
+                            </Button>
+                            <Button href={`/projects/${projectId}/board`} variant="secondary">
+                                Board
+                            </Button>
+                            <Button href={`/projects/${projectId}/members`} variant="secondary">
+                                Members
+                            </Button>
+                            <Button href="/projects/create" variant="icon" ariaLabel="Add new project">
+                                +
+                            </Button>
+                        </>
+                    }
+                />
+                {epicId ? (
+                    <BacklogBoard epicId={epicId} />
+                ) : (
+                    <ErrorState
+                        message="Select an epic to view its backlog."
+                        onRetry={() => router.push(`/projects/${projectId}/epics`)}
+                    />
+                )}
+            </PageLayout>
+        </ProjectAccessGuard>
     );
 }
