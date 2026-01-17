@@ -2,6 +2,7 @@
 
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { useSidebar } from "@/app/core/contexts/sidebar-context";
 import { SIDEBAR_WIDTH } from "@/app/core/utils/sidebar.utils";
 import { getUserInitials, getDisplayName } from "@/app/features/board/utils/user.utils";
@@ -42,7 +43,11 @@ export function Sidebar() {
         >
             <div className="flex flex-col h-full p-4">
                 <div className="flex flex-col items-center mb-6">
-                    <div className="w-20 h-20 rounded-full bg-linear-to-br from-purple-400 to-indigo-500 flex items-center justify-center text-white text-2xl font-bold mb-3 shadow-lg overflow-hidden">
+                    <Link
+                        href="/user"
+                        aria-label="Open user profile"
+                        className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-400 to-indigo-500 flex items-center justify-center text-white text-2l font-bold mb-3 shadow-lg overflow-hidden"
+                    >
                         {user.image ? (
                             <Image
                                 src={user.image}
@@ -54,7 +59,7 @@ export function Sidebar() {
                         ) : (
                             initials
                         )}
-                    </div>
+                    </Link>
                     {!isCollapsed && (
                         <div className="text-center">
                             <p className="font-semibold text-gray-800 text-lg">
